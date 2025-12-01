@@ -1,0 +1,44 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LifeManagementApp.ViewModels"
+             xmlns:cv="clr-namespace:LifeManagementApp.Resources.Converters"
+             x:Class="LifeManagementApp.Views.AllNotesPage"
+             Title="Muistiinpanot">
+
+    <ContentPage.BindingContext>
+        <vm:AllNotesViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <cv:FirstLineConverter x:Key="FirstLineC"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*, Auto" Padding="10">
+        <CollectionView ItemsSource="{Binding Notes}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AllNotesViewModel}}, Path=SelectCommand}" CommandParameter="{Binding .}"/>
+                        </StackLayout.GestureRecognizers>
+                        <Label Text="{Binding Text, Converter={StaticResource FirstLineC}}" FontAttributes="Bold" FontSize="18"/>
+                        <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy HH:mm}'}" TextColor="Gray"/>
+                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,5,0,0"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="1" 
+                Text="+" 
+                Command="{Binding AddCommand}" 
+                FontSize="30" 
+                CornerRadius="30" 
+                HeightRequest="60" 
+                WidthRequest="60" 
+                HorizontalOptions="End"
+                Margin="20"
+                BackgroundColor="#512BD4"
+                TextColor="White"/>
+    </Grid>
+</ContentPage>

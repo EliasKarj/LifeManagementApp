@@ -10,8 +10,8 @@
 
     <Grid Padding="15">
         <Editor Text="{Binding CurrentNote.Text}" 
-                Placeholder="Kirjoita muistiinpano tähän..." 
-                VerticalOptions="FillAndExpand"
+                Placeholder="Kirjoita muistiinpano tahan..." 
+                VerticalOptions="Fill"
                 AutoSize="TextChanges"/>
     </Grid>
 </ContentPage>

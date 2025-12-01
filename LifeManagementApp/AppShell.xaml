@@ -4,11 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:LifeManagementApp"
+    xmlns:views="clr-namespace:LifeManagementApp.Views"
     Title="LifeManagementApp">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Muistiinpanot"
+        ContentTemplate="{DataTemplate views:AllNotesPage}"
+        Route="AllNotesPage" />
 
 </Shell>

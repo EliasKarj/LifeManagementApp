@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using LifeManagementApp.Services;
+using LifeManagementApp.Interfaces;
+using LifeManagementApp.ViewModels;
+using LifeManagementApp.Views;
 
 namespace LifeManagementApp
 {
@@ -16,8 +20,15 @@ namespace LifeManagementApp
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
+            builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<IJokeService, JokeService>();
+            builder.Services.AddTransient<AllNotesPage>();
+            builder.Services.AddTransient<AllNotesViewModel>();
+            builder.Services.AddTransient<NotePage>();
+            builder.Services.AddTransient<NoteViewModel>();
+
 
             return builder.Build();
         }

@@ -1,5 +1,4 @@
-﻿using JokeConsole;
-using LifeManagementApp.Models;
+﻿using LifeManagementApp.Models;
 
 namespace LifeManagementApp.Interfaces
 {

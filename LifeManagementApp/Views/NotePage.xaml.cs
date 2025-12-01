@@ -26,4 +26,4 @@ public partial class NotePage : ContentPage
             }
         }
     }
-}
+} 

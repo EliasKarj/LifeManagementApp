@@ -1,9 +1,13 @@
-﻿namespace LifeManagementApp.Views;
+﻿using LifeManagementApp.ViewModels;
 
-public partial class AllNotesPage : ContentPage
+namespace LifeManagementApp.Views
 {
-    public AllNotesPage()
+    public partial class AllNotesPage : ContentPage
     {
-        InitializeComponent();
+        public AllNotesPage(AllNotesViewModel vm)
+        {
+            InitializeComponent();
+            BindingContext = vm;
+        }
     }
 }

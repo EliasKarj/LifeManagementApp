@@ -4,9 +4,9 @@ namespace LifeManagementApp.Views;
 
 public partial class NotePage : ContentPage
 {
-    public NotePage()
+    public NotePage(NoteViewModel vm)
     {
         InitializeComponent();
-        BindingContext = new NoteViewModel();
+        BindingContext = vm;
     }
 }

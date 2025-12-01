@@ -1,6 +1,6 @@
 ﻿#pragma warning disable CS0618
+using LifeManagementApp.Interfaces;
 using LifeManagementApp.Models;
-using System.Text.Json;
 using System.Windows.Input;
 
 namespace LifeManagementApp.ViewModels
@@ -8,6 +8,7 @@ namespace LifeManagementApp.ViewModels
     public class NoteViewModel : IQueryAttributable, System.ComponentModel.INotifyPropertyChanged
     {
         private Note _currentNote = new Note();
+        private readonly INoteService _noteService;
 
         public Note CurrentNote
         {
@@ -22,15 +23,11 @@ namespace LifeManagementApp.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public NoteViewModel()
+        public NoteViewModel(INoteService noteService)
         {
+            _noteService = noteService;
             SaveCommand = new Command(async () => await SaveAsync());
             DeleteCommand = new Command(async () => await DeleteAsync());
-        }
-
-        public NoteViewModel(Note note) : this()
-        {
-            CurrentNote = note;
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -40,44 +37,41 @@ namespace LifeManagementApp.ViewModels
                 string? noteId = query["id"]?.ToString();
                 if (!string.IsNullOrEmpty(noteId))
                 {
-                    LoadNoteById(noteId);
-                }
-            }
-        }
-
-        private void LoadNoteById(string noteId)
-        {
-            var filePath = Path.Combine(FileSystem.AppDataDirectory, "notes.json");
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    var json = File.ReadAllText(filePath);
-                    if (!string.IsNullOrWhiteSpace(json))
+                    Task.Run(async () =>
                     {
-                        var notes = JsonSerializer.Deserialize<List<Note>>(json);
-                        var foundNote = notes?.FirstOrDefault(n => n.Id == noteId);
-                        if (foundNote != null)
+                        var note = await _noteService.GetNoteAsync(noteId);
+                        if (note != null)
                         {
-                            CurrentNote = foundNote;
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                CurrentNote = note;
+                            });
                         }
-                    }
+                    });
                 }
-                catch { }
             }
         }
 
         private async Task SaveAsync()
         {
             if (string.IsNullOrWhiteSpace(CurrentNote.Text)) return;
+
             CurrentNote.Date = DateTime.Now;
-            MessagingCenter.Send(this, "Save", CurrentNote);
+
+            await _noteService.SaveNoteAsync(CurrentNote);
+
+            MessagingCenter.Send(this, "Refresh", "Saved");
+
             await Shell.Current.GoToAsync("..");
         }
 
         private async Task DeleteAsync()
         {
-            MessagingCenter.Send(this, "Delete", CurrentNote);
+            // Poistetaan tietokannasta
+            await _noteService.DeleteNoteAsync(CurrentNote);
+
+            MessagingCenter.Send(this, "Refresh", "Deleted");
+
             await Shell.Current.GoToAsync("..");
         }
 

@@ -3,6 +3,7 @@ using LifeManagementApp.Services;
 using LifeManagementApp.Interfaces;
 using LifeManagementApp.ViewModels;
 using LifeManagementApp.Views;
+using LifeManagementApp.Data;
 
 namespace LifeManagementApp
 {
@@ -24,6 +25,8 @@ namespace LifeManagementApp
 #endif
             builder.Services.AddHttpClient();
             builder.Services.AddSingleton<IJokeService, JokeService>();
+
+            builder.Services.AddSingleton<INoteService, NoteService>();
 
             builder.Services.AddTransient<AllNotesPage>();
             builder.Services.AddTransient<AllNotesViewModel>();
